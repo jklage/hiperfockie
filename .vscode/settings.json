@@ -1,0 +1,37 @@
+{
+  // Formato al guardar con Prettier (usa frontend/.prettierrc y .editorconfig)
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 2,
+  "files.eol": "\n",
+  "files.encoding": "utf8",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+
+  // Los archivos SQL se dejan como están (los comentarios están alineados a mano)
+  "[sql]": { "editor.formatOnSave": false },
+  "[markdown]": { "files.trimTrailingWhitespace": false },
+
+  // Ocultar carpetas generadas para que el explorador muestre solo el código
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.angular": true,
+    "**/dist": true
+  },
+  "search.exclude": {
+    "**/package-lock.json": true
+  },
+
+  // TypeScript del proyecto de Angular, no el que trae VS Code
+  "typescript.tsdk": "frontend/node_modules/typescript/lib",
+  "typescript.preferences.quoteStyle": "single",
+  "javascript.preferences.quoteStyle": "single",
+
+  // Terminal en PowerShell y ventanas de depuración sin abrir la consola de depuración
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "debug.internalConsoleOptions": "neverOpen",
+
+  // El explorador de npm muestra los scripts de las tres package.json
+  "npm.packageManager": "npm",
+  "npm.exclude": "**/node_modules/**"
+}

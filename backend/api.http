@@ -1,0 +1,39 @@
+### Pruebas manuales de la API con la extensión REST Client.
+### Da clic en "Send Request" arriba de cada petición. El backend debe estar encendido.
+
+@api = http://localhost:3000/api
+
+### Salud del servidor
+GET {{api}}/salud
+
+### Iniciar sesión con el usuario demo (guarda el token para las demás)
+# @name login
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{ "correo": "yael@hiperfockie.test", "password": "Hiperfockie2026" }
+
+###
+@token = {{login.response.body.datos.token}}
+
+### Usuario de la sesión
+GET {{api}}/auth/yo
+Authorization: Bearer {{token}}
+
+### Buscar un tema en las tres fuentes
+GET {{api}}/busqueda?q=agujeros negros
+Authorization: Bearer {{token}}
+
+### Mis focos
+GET {{api}}/focos
+Authorization: Bearer {{token}}
+
+### Crear un foco (409 si ya hay 5 activos)
+POST {{api}}/focos
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{ "tema": "Pulpos" }
+
+### Ruta protegida sin token (debe responder 401)
+GET {{api}}/focos

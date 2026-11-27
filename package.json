@@ -1,0 +1,17 @@
+{
+  "name": "hiperfockie",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Atajos para correr backend y frontend desde la raíz (como en Café Sanrio)",
+  "scripts": {
+    "instalar": "npm ci --prefix backend && npm ci --prefix frontend",
+    "backend": "npm run dev --prefix backend",
+    "frontend": "npm start --prefix frontend",
+    "test": "npm test --prefix backend",
+    "test:api": "npm run test:api --prefix backend",
+    "build": "npm run build --prefix frontend"
+  },
+  "engines": {
+    "node": ">=22.12"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  // Ejecutar y depurar (F5). "Hiperfockie completo" levanta API y navegador juntos.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Backend (API)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/backend",
+      "program": "${workspaceFolder}/backend/server.js",
+      "runtimeArgs": ["--env-file=.env", "--watch"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Backend: pruebas unitarias",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/backend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["test"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Frontend (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "preLaunchTask": "Frontend: ng serve",
+      "url": "http://localhost:4200/",
+      "webRoot": "${workspaceFolder}/frontend"
+    },
+    {
+      "name": "Frontend (Edge)",
+      "type": "msedge",
+      "request": "launch",
+      "preLaunchTask": "Frontend: ng serve",
+      "url": "http://localhost:4200/",
+      "webRoot": "${workspaceFolder}/frontend"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Hiperfockie completo",
+      "configurations": ["Backend (API)", "Frontend (Chrome)"],
+      "stopAll": true
+    }
+  ]
+}

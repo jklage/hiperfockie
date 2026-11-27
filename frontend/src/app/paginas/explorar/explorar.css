@@ -1,0 +1,42 @@
+.buscador { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: stretch; }
+.caja { position: relative; display: block; border: 2px solid var(--tinta); border-radius: 12px; background: var(--blanco); }
+.caja textarea { width: 100%; border: 0; resize: none; font: inherit; font-size: 18px; padding: 14px 80px 14px 16px; background: transparent; min-height: 56px; field-sizing: content; max-height: 140px; }
+.caja textarea:focus { outline: none; }
+.caja:focus-within { box-shadow: 0 0 0 3px #F9D2C5; }
+.contador { position: absolute; right: 14px; bottom: 14px; }
+.grande { min-height: 56px; padding: 8px 24px; font-size: 17px; line-height: 1.15; }
+.alerta { margin-top: 12px; }
+.estado { margin: 12px 0; text-transform: uppercase; }
+.filtros { display: none; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.filtros .fuente { border: 0; min-height: 36px; }
+.filtros .inactiva { opacity: .45; }
+.filtros .caida { background: var(--aviso); color: var(--tinta); border: 1.5px solid var(--aviso-borde); }
+
+.columnas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.col { display: grid; gap: 16px; align-content: start; }
+.columna { display: grid; gap: 14px; }
+.cabeza { display: flex; justify-content: space-between; align-items: center; }
+.caida-panel { display: grid; gap: 6px; }
+.caida-panel .btn { justify-self: end; }
+.vacio { font-size: 14px; }
+.sugeridos h2 { font-size: 1.15rem; }
+.sugeridos ol { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 12px; }
+.sugeridos li { display: grid; grid-template-columns: 28px 1fr auto; gap: 4px 8px; align-items: center; }
+.sugeridos a { color: var(--tinta); font-size: 15px; }
+.barra { grid-column: 2; height: 5px; background: var(--papel-2); border-radius: 3px; overflow: hidden; }
+.barra i { display: block; height: 100%; background: var(--tinta); }
+.vacio-inicial { padding: 64px 0; max-width: 560px; display: grid; gap: 12px; }
+
+@media (max-width: 1023px) {
+  .columnas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .col:last-child { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+}
+@media (max-width: 767px) {
+  .buscador { grid-template-columns: 1fr 1fr; }
+  .caja { grid-column: 1 / -1; }
+  .grande { min-height: 48px; }
+  .filtros { display: flex; }
+  .columnas { grid-template-columns: 1fr; }
+  .col:last-child { grid-template-columns: 1fr; }
+  .columna.oculta { display: none; }
+}

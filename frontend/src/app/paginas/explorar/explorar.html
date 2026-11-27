@@ -1,0 +1,82 @@
+<section class="contenedor pagina">
+  <form class="buscador" (ngSubmit)="buscar()">
+    <label class="caja">
+      <span class="sr">Tu pregunta</span>
+      <textarea name="q" rows="1" maxlength="200" [(ngModel)]="texto" (keydown.enter)="$event.preventDefault(); buscar()"
+        placeholder="¿Qué quieres entender hoy?"></textarea>
+      <span class="tec contador">{{ texto.length }}/200</span>
+    </label>
+    <button class="btn btn-primario grande" type="submit" [disabled]="cargando()">{{ cargando() ? 'Buscando…' : 'Buscar' }}</button>
+    <button class="btn btn-tinta grande" type="button" (click)="convertir()" [disabled]="!resultado() || creando()">Convertir<br class="oculto-movil" /> en foco</button>
+  </form>
+  @if (error()) { <p class="alerta alerta-error">{{ error() }}</p> }
+
+  @if (resultado(); as r) {
+    <p class="tec estado">
+      3 fuentes · {{ r.tarjetas.length }} resultados · {{ segundos() | number: '1.2-2' }} s
+      @if (r.desdeCache) { · caché guardada 7 días }
+    </p>
+
+    <div class="filtros" role="tablist" aria-label="Filtrar por fuente">
+      @for (f of fuentes; track f) {
+        <button type="button" class="fuente" [class]="'fuente-' + f" [class.caida]="caidas().has(f)" [class.inactiva]="filtro() !== 'todas' && filtro() !== f"
+          (click)="filtro.set(filtro() === f ? 'todas' : f)">
+          {{ nombre[f] }} @if (caidas().has(f)) { ! }
+        </button>
+      }
+    </div>
+
+    <div class="columnas">
+      @for (f of fuentes; track f) {
+        <div class="col">
+          <div class="columna" [class.oculta]="filtro() !== 'todas' && filtro() !== f">
+            <header class="cabeza oculto-movil">
+              <span class="fuente" [class]="'fuente-' + f">{{ nombre[f] }}</span>
+              <span class="tec">{{ porFuente()[f].length }} resultados</span>
+            </header>
+            @if (caidas().has(f)) {
+              <div class="alerta alerta-aviso caida-panel">
+                <p><b>{{ nombre[f] }} no respondió en 5 s.</b></p>
+                <p>Mostramos lo que llegó de las otras fuentes.</p>
+                <button class="btn btn-chico" (click)="reintentar()">Reintentar</button>
+              </div>
+            }
+            @for (t of porFuente()[f]; track t.url) {
+              <app-tarjeta [tarjeta]="t">
+                <button class="enlace" (click)="convertir(t)" [disabled]="creando()">Crear foco desde aquí</button>
+              </app-tarjeta>
+            } @empty {
+              @if (!caidas().has(f)) { <p class="suave vacio">Sin resultados en {{ nombre[f] }}.</p> }
+            }
+          </div>
+          @if ($last) {
+            <aside class="panel sugeridos">
+              <h2>Subtemas sugeridos</h2>
+              <p class="tec">0.5·R + 0.3·C + 0.2·N</p>
+              <ol>
+                @for (s of sugeridos(); track s.url; let i = $index) {
+                  <li>
+                    <span class="etiqueta">{{ dos(i + 1) }}</span>
+                    <a [href]="s.url" target="_blank" rel="noopener">{{ s.titulo }}</a>
+                    <span class="tec num">{{ s.puntaje | number: '1.2-2' }}</span>
+                    <span class="barra"><i [style.width.%]="s.puntaje * 100"></i></span>
+                  </li>
+                }
+              </ol>
+            </aside>
+          }
+        </div>
+      }
+    </div>
+  } @else if (!cargando()) {
+    <div class="vacio-inicial">
+      <p class="etiqueta">Explorar // listo</p>
+      <h1 class="titular">¿Qué quieres entender hoy?</h1>
+      <p class="suave">Escribe una pregunta de 3 a 200 caracteres. Buscamos en Wikipedia, OpenAlex y Open Library al mismo tiempo.</p>
+    </div>
+  }
+</section>
+
+@if (limite()) {
+  <app-limite [tema]="resultado()?.pregunta ?? texto" (cerrar)="limite.set(false)" (liberado)="liberado()" />
+}

@@ -1,0 +1,12 @@
+{
+  // Extensiones recomendadas: VS Code las ofrece al abrir la carpeta
+  "recommendations": [
+    "angular.ng-template",
+    "esbenp.prettier-vscode",
+    "editorconfig.editorconfig",
+    "cweijan.vscode-mysql-client2",
+    "humao.rest-client",
+    "pomdtr.excalidraw-editor",
+    "christian-kohler.path-intellisense"
+  ]
+}

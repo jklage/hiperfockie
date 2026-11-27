@@ -1,0 +1,26 @@
+{
+  "name": "hiperfockie-backend",
+  "version": "1.0.0",
+  "description": "API REST de Hiperfockie (Express 5 + MySQL 8.0)",
+  "private": true,
+  "main": "server.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "start": "node --env-file=.env server.js",
+    "dev": "node --env-file=.env --watch server.js",
+    "test": "node --test test/recomendacion.test.js test/middlewares.test.js test/adaptadores.test.js",
+    "test:api": "node --env-file=.env.test --test --test-concurrency=1 test/api.test.js",
+    "db:crear": "mysql -u root -p < sql/hiperfockie.sql",
+    "db:seed": "mysql -u root -p hiperfockie < sql/seed.sql"
+  },
+  "dependencies": {
+    "bcrypt": "6.0.0",
+    "express": "5.2.1",
+    "jsonwebtoken": "9.0.3",
+    "mysql2": "3.24.6",
+    "nodemailer": "10.0.16"
+  }
+}

@@ -1,0 +1,53 @@
+<section class="contenedor pagina">
+  @if (error()) { <p class="alerta alerta-error">{{ error() }}</p> }
+  @if (sinFocos()) {
+    <div class="vacio">
+      <p class="etiqueta">Historial // vacío</p>
+      <h1 class="titulo">Aún no hay viñetas</h1>
+      <p class="suave">Crea tu primer foco en Explorar y cada tema que visites aparecerá aquí como una viñeta.</p>
+      <a class="btn btn-primario" routerLink="/explorar">Ir a Explorar</a>
+    </div>
+  }
+  @if (datos(); as h) {
+    <header class="encabezado">
+      <div>
+        <h1 class="titulo">Historial</h1>
+        <p class="tec">Foco {{ dos(h.foco.id) }} · {{ h.vinetas.length }} viñetas@if (h.vinetas.length) { · {{ fechaCorta(h.vinetas[0].fecha) }} }</p>
+      </div>
+      @if (focos().length > 1) {
+        <label class="selector">
+          <span class="sr">Elegir foco</span>
+          <select class="input" [ngModel]="elegido()" (ngModelChange)="cambiarFoco($event)">
+            @for (f of focos(); track f.id) { <option [ngValue]="f.id">{{ f.tema }}@if (f.estado === 'archivado') { (archivado) }</option> }
+          </select>
+        </label>
+      }
+    </header>
+    <p class="tema">{{ h.foco.tema }}</p>
+
+    <div class="rejilla">
+      <nav class="indice oculto-movil" aria-label="Viñetas">
+        @for (v of h.vinetas; track v.orden) { <button (click)="irA(v.orden)" [class.lleno]="v.notas > 0">{{ v.orden }}</button> }
+      </nav>
+
+      <ol class="comic">
+        @for (v of h.vinetas; track v.orden; let i = $index) {
+          <li class="vineta" [id]="'v' + v.orden" [class.invertida]="i % 2 === 1">
+            <span class="numero">{{ v.orden }}</span>
+            <div class="dibujo" [innerHTML]="dibujo(i)"></div>
+            <div class="texto">
+              <h2><a [href]="v.url" target="_blank" rel="noopener">{{ v.titulo }}</a></h2>
+              <p class="datos"><span class="fuente" [class]="'fuente-' + v.fuente">{{ nombre[v.fuente] }}</span> <span class="tec">{{ hora(v.fecha) }} · N{{ v.nivel }}</span></p>
+              <p class="globo">{{ globo(v) }}</p>
+            </div>
+          </li>
+        }
+      </ol>
+
+      <aside class="acciones oculto-movil">
+        <a class="btn btn-tinta btn-bloque" [routerLink]="['/focos', h.foco.id, 'madriguera']">Ir a la madriguera</a>
+        <button class="btn btn-bloque" (click)="irA(h.vinetas.length)">Ver más viñetas ↓</button>
+      </aside>
+    </div>
+  }
+</section>

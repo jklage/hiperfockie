@@ -1,0 +1,53 @@
+.migas a { color: var(--tinta-2); }
+.encabezado { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px; margin: 6px 0 16px; }
+.encabezado .titulo { max-width: 32ch; }
+.alerta { margin-bottom: 12px; }
+.rejilla { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+.izq { display: grid; gap: 14px; min-width: 0; }
+.lienzo { overflow-x: auto; padding: 16px; transition: opacity .2s; }
+.lienzo.ocupado { opacity: .5; pointer-events: none; }
+.lienzo svg { display: block; margin: 0 auto; height: auto; }
+.leyenda { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; text-transform: uppercase; }
+.punto { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-left: 8px; }
+.punto.lleno { background: var(--tinta); }
+.punto.naranja { background: var(--naranja); }
+.punto.vacio { border: 1.5px dashed var(--tinta-2); }
+
+:host ::ng-deep .lienzo .nivel { font-family: var(--f-tec); font-size: 12px; fill: var(--tinta-2); }
+:host ::ng-deep .lienzo .rama { fill: none; stroke: var(--tinta); stroke-width: 1.5; }
+:host ::ng-deep .lienzo .rama.sugerido, :host ::ng-deep .lienzo .rama.tope { stroke-dasharray: 5 5; stroke: var(--tinta-2); }
+:host ::ng-deep .lienzo .caja { cursor: pointer; outline: none; }
+:host ::ng-deep .lienzo .caja rect { fill: var(--blanco); stroke: var(--tinta); stroke-width: 1.5; }
+:host ::ng-deep .lienzo .caja:hover rect, :host ::ng-deep .lienzo .caja:focus rect { stroke: var(--naranja); stroke-width: 2.5; }
+:host ::ng-deep .lienzo .caja.actual rect { fill: var(--naranja); stroke: var(--naranja); }
+:host ::ng-deep .lienzo .caja.actual .texto-caja { color: #fff; font-weight: 700; }
+:host ::ng-deep .lienzo .caja.sugerido rect { fill: var(--papel); stroke: var(--tinta-2); stroke-dasharray: 5 4; }
+:host ::ng-deep .lienzo .caja.sugerido .texto-caja { color: var(--tinta-2); }
+:host ::ng-deep .lienzo .caja.tope { cursor: default; }
+:host ::ng-deep .lienzo .caja.tope rect { fill: none; stroke: var(--borde); stroke-dasharray: 5 4; }
+:host ::ng-deep .lienzo .caja.tope .texto-caja { color: var(--borde); }
+:host ::ng-deep .lienzo .texto-caja { height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; padding: 4px 8px; font-size: 12.5px; line-height: 1.2; color: var(--tinta); overflow: hidden; }
+:host ::ng-deep .lienzo .texto-caja span { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+:host ::ng-deep .lienzo .puntaje { font-family: var(--f-tec); font-size: 11px; fill: var(--naranja); }
+
+.detalle { display: grid; gap: 8px; padding: 18px; }
+.detalle h2, .subtemas h2, .notas h2 { font-size: 1.15rem; }
+.linea { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.subtemas { padding: 18px; }
+.subtemas ol { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 12px; }
+.subtemas li { display: grid; grid-template-columns: 28px 1fr auto; gap: 8px; align-items: start; }
+.titulo-sub { color: var(--tinta); text-align: left; font-size: 15px; }
+.titulo-sub:hover { color: var(--naranja); }
+.barra { display: block; height: 5px; background: var(--papel-2); border-radius: 3px; overflow: hidden; margin-top: 4px; }
+.barra i { display: block; height: 100%; background: var(--tinta); }
+
+.notas { position: sticky; top: 84px; display: grid; gap: 10px; padding: 18px; }
+.nota { border: 1.5px solid var(--borde); border-radius: 8px; padding: 12px; display: grid; gap: 8px; font-size: 14px; background: var(--papel); }
+.pie-nota { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; }
+.gris { color: var(--tinta-2); }
+.vacia { font-size: 14px; }
+
+@media (max-width: 1023px) {
+  .rejilla { grid-template-columns: 1fr; }
+  .notas { position: static; }
+}

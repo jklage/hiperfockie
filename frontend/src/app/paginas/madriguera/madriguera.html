@@ -1,0 +1,81 @@
+<section class="contenedor pagina">
+  @if (error()) {
+    <p class="alerta alerta-error">{{ error() }}</p>
+    <a class="btn" routerLink="/focos">Volver a Mis focos</a>
+  } @else if (arbol(); as a) {
+    <p class="tec migas"><a routerLink="/focos">Mis focos</a> / Foco {{ dos(a.foco.id) }} · Nivel {{ nivelActual() }} de 5</p>
+    <div class="encabezado">
+      <h1 class="titulo">{{ a.foco.tema }}</h1>
+      <a class="btn btn-chico" [routerLink]="['/focos', a.foco.id, 'historial']">Ver historial</a>
+    </div>
+    @if (!activo()) { <p class="alerta alerta-aviso">Este foco está archivado. Reactívalo en <a routerLink="/focos">Mis focos</a> para seguir explorando.</p> }
+
+    <div class="rejilla">
+      <div class="izq">
+        <div class="lienzo panel" [class.ocupado]="avanzando()">
+          <svg #lienzo role="img" [attr.aria-label]="'Madriguera de ' + a.foco.tema"></svg>
+        </div>
+        <p class="tec leyenda"><span class="punto lleno"></span> visitado <span class="punto naranja"></span> actual <span class="punto vacio"></span> sugerido · clic en uno para bajar</p>
+
+        @if (seleccion(); as s) {
+          <article class="panel detalle">
+            <div class="linea"><span class="fuente" [class]="'fuente-' + s.fuente">{{ nombre[s.fuente] }}</span><span class="tec">Nivel {{ s.nivel }} · {{ s.licencia }}</span></div>
+            <h2>{{ s.titulo }}</h2>
+            @if (s.resumen) { <p class="suave">{{ s.resumen }}</p> }
+            <a [href]="s.url" target="_blank" rel="noopener">Ver en la fuente ↗</a>
+          </article>
+
+          @if (activo()) {
+            <div class="panel subtemas">
+              <h2>Subtemas de «{{ s.titulo }}»</h2>
+              <p class="tec">0.5·R + 0.3·C + 0.2·N · máximo 5</p>
+              @if (s.nivel >= 5) {
+                <p class="alerta alerta-aviso">Llegaste al nivel 5, el máximo de la madriguera.</p>
+              } @else if (cargandoSug()) {
+                <p class="suave">Buscando subtemas…</p>
+              } @else {
+                @for (av of avisosFuente(); track av.mensaje) { <p class="alerta alerta-aviso">{{ av.mensaje }}</p> }
+                <ol>
+                  @for (t of sugeridos(); track t.url; let i = $index) {
+                    <li>
+                      <span class="etiqueta">{{ dos(i + 1) }}</span>
+                      <div>
+                        <button class="enlace titulo-sub" (click)="avanzar(t)" [disabled]="avanzando()">{{ t.titulo }}</button>
+                        <span class="tec"> · {{ nombre[t.fuente] }}@if (t.visitado) { · ya visitado }</span>
+                        <span class="barra"><i [style.width.%]="t.puntaje * 100"></i></span>
+                      </div>
+                      <span class="tec">{{ t.puntaje | number: '1.2-2' }}</span>
+                    </li>
+                  } @empty { <p class="suave">No encontramos subtemas para este tema.</p> }
+                </ol>
+              }
+            </div>
+          }
+        }
+      </div>
+
+      <aside class="panel notas">
+        <h2>Notas</h2>
+        <p class="etiqueta">{{ seleccion()?.titulo }}</p>
+        @for (n of notas(); track n.id) {
+          <div class="nota">
+            @if (editando() === n.id) {
+              <textarea class="input" rows="3" [(ngModel)]="textoEdicion" [attr.aria-label]="'Editar nota'"></textarea>
+              <div class="pie-nota"><button class="enlace" (click)="actualizar(n)">Guardar</button><button class="enlace gris" (click)="editando.set(null)">Cancelar</button></div>
+            } @else {
+              <p>{{ n.texto }}</p>
+              <div class="pie-nota">
+                <span class="tec">{{ fechaCorta(n.creadoEn) }} {{ hora(n.creadoEn) }}@if (n.actualizadoEn) { · editada }</span>
+                <span><button class="enlace" (click)="editar(n)">Editar</button> · <button class="enlace" (click)="eliminar(n)">Eliminar</button></span>
+              </div>
+            }
+          </div>
+        } @empty { <p class="suave vacia">Aún no hay notas en esta tarjeta.</p> }
+        <textarea class="input" rows="4" maxlength="5000" placeholder="Escribe una nota…" [(ngModel)]="nuevaNota" aria-label="Nueva nota"></textarea>
+        <button class="btn btn-primario btn-bloque" (click)="guardarNota()" [disabled]="!nuevaNota.trim()">Guardar nota</button>
+      </aside>
+    </div>
+  } @else {
+    <p class="suave">Cargando madriguera…</p>
+  }
+</section>
